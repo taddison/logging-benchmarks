@@ -4,14 +4,11 @@ using BenchmarkDotNet.Attributes;
 
 namespace logging_benchmarks
 {
-  // [SimpleJob(launchCount: 1, warmupCount: 0, targetCount: 1, invocationCount: 1)]
-  public class FileWrites
+  public class FileWrites : IDisposable
   {
-
     private string _targetFolder;
-
     private StreamWriter _streamWriter;
-
+    private bool disposedValue;
     const string LOG_STRING = "This is a string to log";
 
     public FileWrites()
@@ -20,7 +17,9 @@ namespace logging_benchmarks
       _targetFolder = Path.Combine(folderPath, "temp");
       if (Directory.Exists(_targetFolder))
       {
+        Console.Write("Temp folder exists, deleting...");
         Directory.Delete(_targetFolder, true);
+        Console.WriteLine("done");
       }
       Directory.CreateDirectory(_targetFolder);
 
@@ -48,6 +47,26 @@ namespace logging_benchmarks
       {
         File.WriteAllText(Path.Combine(_targetFolder, Guid.NewGuid().ToString()), LOG_STRING);
       }
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+      if (!disposedValue)
+      {
+        if (disposing)
+        {
+          _streamWriter.Close();
+          _streamWriter.Dispose();
+        }
+
+        disposedValue = true;
+      }
+    }
+
+    public void Dispose()
+    {
+      Dispose(disposing: true);
+      GC.SuppressFinalize(this);
     }
   }
 }

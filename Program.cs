@@ -3,11 +3,22 @@ using BenchmarkDotNet.Running;
 
 namespace logging_benchmarks
 {
-    class Program
+  class Program
+  {
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            BenchmarkRunner.Run<FileWrites>();
-        }
+      //RunFileWritesAndCleanup();
+      BenchmarkRunner.Run<FileWrites>();
     }
+
+    static void RunFileWritesAndCleanup()
+    {
+      using (var fw = new FileWrites() { Repeats = 1 })
+      {
+        fw.WriteToNewFile();
+        fw.WriteToOpenFile();
+      }
+      using var cleanup = new FileWrites();
+    }
+  }
 }
