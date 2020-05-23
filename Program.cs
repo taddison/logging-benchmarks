@@ -1,4 +1,5 @@
 ﻿using System;
+using BenchmarkDotNet.Running;
 
 namespace logging_benchmarks
 {
@@ -6,7 +7,7 @@ namespace logging_benchmarks
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            BenchmarkRunner.Run<FileWrites>();
         }
     }
 }

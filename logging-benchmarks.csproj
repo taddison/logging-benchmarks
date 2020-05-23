@@ -6,4 +6,8 @@
     <RootNamespace>logging_benchmarks</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="benchmarkdotnet" Version="0.12.1" />
+  </ItemGroup>
+
 </Project>
